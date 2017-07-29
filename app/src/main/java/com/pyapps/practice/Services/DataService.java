@@ -1,9 +1,6 @@
 package com.pyapps.practice.Services;
 
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
-import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -16,17 +13,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import com.google.firebase.database.ValueEventListener;
-import com.pyapps.practice.Activities.MainActivity;
 import  com.pyapps.practice.Constants.FirebaseConstants;
 import com.pyapps.practice.Events.LoginEvent;
 import com.pyapps.practice.Events.SignUpEvent;
-import com.pyapps.practice.Models.User;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.EventBusBuilder;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 /**
  * Created by prudh on 7/26/2017.
@@ -184,6 +177,17 @@ public class DataService {
         }
 
         return user;
+    }
+
+    public com.pyapps.practice.Models.users.User getUserUserFormSnapShot1(DataSnapshot dataSnapshot){
+        com.pyapps.practice.Models.users.User user=null;
+        if(dataSnapshot !=null)
+        {
+             //user =com.pyapps.practice.Models.users.User user = dataSnapshot.getValue(com.pyapps.practice.Models.users.User.class);
+        }
+
+        return  user;
+
     }
 
 
