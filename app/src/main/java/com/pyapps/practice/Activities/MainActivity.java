@@ -1,16 +1,11 @@
 package com.pyapps.practice.Activities;
 
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -41,12 +36,23 @@ public class MainActivity extends AppCompatActivity {
         {
             Object o = event.getSender();
             Log.i("onLoginEvent","fired from"+o==null?"NA":o.getClass().getName());
+            DataService.getInstance().sendMessage(new Message("Hello World!",DataService.getInstance().getCurrentUserUID(),"UID2"));
             //readData();
-            DataService.getInstance().getCurrentUserProfile();
+            //DataService.getInstance().getCurrentUserProfile();
         }else
         {
             Toast.makeText(getApplicationContext(),"Sign In Failed",Toast.LENGTH_LONG).show();
         }
+    }
+
+    @Subscribe
+    public void onMessageReceived(MessageReceivedEvent event){
+        if(event!=null && event.getMessage() != null){
+            Object o = event.getSender();
+            Log.i("onMessageReceivedEvent","fired from"+o==null?"NA":o.getClass().getName());
+
+        }
+
     }
 
     public  void readData()

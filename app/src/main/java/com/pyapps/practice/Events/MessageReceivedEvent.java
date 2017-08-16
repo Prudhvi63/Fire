@@ -1,7 +1,6 @@
 package com.pyapps.practice.Events;
 
 import com.pyapps.practice.Models.Message;
-import com.pyapps.practice.Models.users.Messages;
 
 /**
  * Created by prudh on 8/14/2017.
@@ -9,9 +8,19 @@ import com.pyapps.practice.Models.users.Messages;
 
 public class MessageReceivedEvent {
 
+    Object sender;
     Message message;
+
+    public Object getSender() {
+        return sender;
+    }
 
     public Message getMessage() {
         return message;
+    }
+
+    public MessageReceivedEvent(Object sender,Message message) {
+        this.sender = sender;
+        this.message = message;
     }
 }
