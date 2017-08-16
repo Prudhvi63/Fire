@@ -1,9 +1,5 @@
 package com.pyapps.practice.Events;
 
-/**
- * Created by prudh on 7/27/2017.
- */
-
 public class SignUpEvent extends BaseEvent {
     String uid;
 

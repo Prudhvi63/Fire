@@ -17,6 +17,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.pyapps.practice.Events.LoginEvent;
+import com.pyapps.practice.Events.MessageReceivedEvent;
+import com.pyapps.practice.Models.Message;
 import com.pyapps.practice.R;
 import com.pyapps.practice.Services.DataService;
 
@@ -81,6 +83,14 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Subscribe
+    public  void  messageReceived(MessageReceivedEvent e)
+    {
+        Message msg = e.getMessage();
+        
+
+
+    }
     @Override
     protected void onStart() {
         super.onStart();

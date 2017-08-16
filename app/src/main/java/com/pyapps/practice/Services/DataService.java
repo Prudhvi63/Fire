@@ -123,9 +123,8 @@ public class DataService {
                 currentUserRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        User user = getUserFromSnapShot(dataSnapshot);
+                        com.pyapps.practice.Models.users.User user = getUserUserFormSnapShot1(dataSnapshot);
                     }
-
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
 
@@ -135,58 +134,27 @@ public class DataService {
         }
     }
 
-    private User getUserFromSnapShot(DataSnapshot dataSnapshot) {
-        User user = null;
-        if (dataSnapshot != null) {
-                String name = (String)dataSnapshot.child(FirebaseConstants.KEY_NAME).getValue();
-                String email = (String)dataSnapshot.child(FirebaseConstants.KEY_EMAIL).getValue();;
-                String about = (String)dataSnapshot.child(FirebaseConstants.KEY_ABOUT).getValue();;
-                long gender = (long)dataSnapshot.child(FirebaseConstants.KEY_GENDER).getValue();;
-                String height = (String)dataSnapshot.child(FirebaseConstants.KEY_HEIGHT).getValue();;
-                String phone = (String)dataSnapshot.child(FirebaseConstants.KEY_PHONE).getValue();;
-                long weight = (long)dataSnapshot.child(FirebaseConstants.KEY_WEIGHT).getValue();;
-                ArrayList<String> sentMessages =null;
-                ArrayList<String> receivedMessages=null;
-                ArrayList<String> photoUrls=null;
-                if (dataSnapshot.hasChild(FirebaseConstants.KEY_PHOTOURLS)) {
-                    DataSnapshot photoSnapshot = dataSnapshot.child(FirebaseConstants.KEY_PHOTOURLS);
-                    photoUrls = new ArrayList<String>();
-                    for (DataSnapshot dataSnapshot1 : photoSnapshot.getChildren()) {
-                        photoUrls.add(dataSnapshot1.getKey());
-                    }
-                }
-                if (dataSnapshot.hasChild(FirebaseConstants.KEY_MESSAGES)) {
-                    DataSnapshot messagesSnapShot = dataSnapshot.child(FirebaseConstants.KEY_MESSAGES);
-                    if (messagesSnapShot.hasChild(FirebaseConstants.KEY_SENT)) {
-                        DataSnapshot sentSnapshot = messagesSnapShot.child(FirebaseConstants.KEY_SENT);
-                        sentMessages = new ArrayList<String>();
-                        for (DataSnapshot messageSnapshot : sentSnapshot.getChildren()) {
-                            sentMessages.add(messageSnapshot.getKey());
-                        }
-                    }
-                    if (messagesSnapShot.hasChild(FirebaseConstants.KEY_RECEIVED)) {
-                        DataSnapshot receivedSnapshot = messagesSnapShot.child(FirebaseConstants.KEY_RECEIVED);
-                        receivedMessages = new ArrayList<String>();
-                        for (DataSnapshot messageSnapshot : receivedSnapshot.getChildren()) {
-                            receivedMessages.add(messageSnapshot.getKey());
-                        }
-                    }
-                }
-                user = new User(email,about,gender,height,name,phone,weight,photoUrls,sentMessages,receivedMessages);
+    public void getMatches(){
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference ref =dbRef.child(FirebaseConstants.KEY_USERS);
 
-        }
-
-        return user;
     }
 
     public com.pyapps.practice.Models.users.User getUserUserFormSnapShot1(DataSnapshot dataSnapshot){
         com.pyapps.practice.Models.users.User user=null;
         if(dataSnapshot !=null)
         {
-             //user =com.pyapps.practice.Models.users.User user = dataSnapshot.getValue(com.pyapps.practice.Models.users.User.class);
+            user = dataSnapshot.getValue(com.pyapps.practice.Models.users.User.class);
         }
-
         return  user;
+
+    }
+
+    public void sendMessage(Object message)
+    {
+        DatabaseReference msgRef = this.m_MainRef.child(FirebaseConstants.KEY_MESSAGES);
+        this.m_MainRef.child(FirebaseConstants.KEY_SENT).child(m_Auth.getCurrentUser().getUid()).child("messgages");
+
 
     }
 
