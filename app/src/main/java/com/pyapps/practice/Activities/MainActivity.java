@@ -2,6 +2,8 @@ package com.pyapps.practice.Activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -14,11 +16,16 @@ import com.google.firebase.database.ValueEventListener;
 import com.pyapps.practice.Events.LoginEvent;
 import com.pyapps.practice.Events.MessageReceivedEvent;
 import com.pyapps.practice.Models.Message;
+import com.pyapps.practice.Models.Post;
 import com.pyapps.practice.R;
+import com.pyapps.practice.RecyclerViewAdpater;
 import com.pyapps.practice.Services.DataService;
+import com.pyapps.practice.Services.TempService;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,7 +43,15 @@ public class MainActivity extends AppCompatActivity {
         {
             Object o = event.getSender();
             Log.i("onLoginEvent","fired from"+o==null?"NA":o.getClass().getName());
-            DataService.getInstance().sendMessage(new Message("Hello World!",DataService.getInstance().getCurrentUserUID(),"UID2"));
+            ArrayList<Post> posts = new ArrayList<Post>();
+            posts.add(new Post("",""));
+            TempService.increaseSize(posts);
+            RecyclerView recyclerView = (RecyclerView) this.findViewById(R.id.recycler);
+            RecyclerViewAdpater adapter = new RecyclerViewAdpater(posts,this);
+            RecyclerView.LayoutManager  mLayoutManager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
+            recyclerView.setLayoutManager(mLayoutManager);
+            recyclerView.setAdapter(adapter);
+            //DataService.getInstance().sendMessage(new Message("Hello World!",DataService.getInstance().getCurrentUserUID(),"UID2"));
             //readData();
             //DataService.getInstance().getCurrentUserProfile();
         }else
