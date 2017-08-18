@@ -24,6 +24,7 @@ import com.pyapps.practice.Services.TempService;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 
@@ -36,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         DataService.getInstance().logInUser("prudhvi@c.com","secret123");
     }
 
-    @Subscribe
+    @Subscribe(threadMode= ThreadMode.POSTING)
     public void onLoginEvent(LoginEvent event)
     {
         if(event!=null && event.getUid()!=null)

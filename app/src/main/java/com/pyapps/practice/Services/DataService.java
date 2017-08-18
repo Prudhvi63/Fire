@@ -13,6 +13,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.pyapps.practice.Constants.FirebaseKeyConstants;
 import com.pyapps.practice.Events.LoginEvent;
 import com.pyapps.practice.Events.MessageReceivedEvent;
@@ -20,6 +22,9 @@ import com.pyapps.practice.Events.SignUpEvent;
 import com.pyapps.practice.Models.Message;
 
 import org.greenrobot.eventbus.EventBus;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Created by prudh on 7/26/2017.
@@ -42,10 +47,13 @@ public class DataService {
     DatabaseReference m_ConversationRef;
     DatabaseReference m_UserConvRef;
     DatabaseReference m_ConvBetweenRef;
+    FirebaseStorage m_Storage;
+    StorageReference m_StorageRef;
 
     private DataService() {
         m_Auth = FirebaseAuth.getInstance();
         m_Db = FirebaseDatabase.getInstance();
+        m_Storage = FirebaseStorage.getInstance();
         if (m_Db != null) {
             m_MainRef = m_Db.getReference();
             m_UsersRef = m_MainRef.child(FirebaseKeyConstants.USERS);
@@ -56,6 +64,17 @@ public class DataService {
             m_UserConvRef = m_MainRef.child(FirebaseKeyConstants.USER_CONVERSATIONS);
             m_ConvBetweenRef = m_MainRef.child(FirebaseKeyConstants.CONVERSATIONS_BTWN_USERS);
             setReceivedMessagesListenser();
+        }
+        if(m_Storage !=null){
+            m_StorageRef = m_Storage.getReference();
+            Task t =m_StorageRef.putStream(new InputStream() {
+                @Override
+                public int read() throws IOException {
+                    return 0;
+                }
+            });
+
+
         }
     }
 

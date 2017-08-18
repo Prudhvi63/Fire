@@ -12,7 +12,6 @@ public class TempService {
 
     public static void  increaseSize(ArrayList<Post> posts)
     {
-
         posts.add(new Post("",""));
         posts.add(new Post("",""));
         posts.add(new Post("",""));
