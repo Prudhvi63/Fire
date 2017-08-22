@@ -25,9 +25,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activities.BNActivity"
-            android:label="@string/title_activity_bn" />
-        <activity
             android:name=".Activities.MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar"></activity>

@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 
 import android.widget.TextView;
 
+import com.pyapps.practice.Fragments.PostsFragment;
 import com.pyapps.practice.R;
 
 public class MainActivity extends AppCompatActivity {
@@ -64,6 +65,8 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+
 
     }
 
@@ -139,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
+            return PostsFragment.newInstance(Integer.toString(position),"");
         }
 
         @Override

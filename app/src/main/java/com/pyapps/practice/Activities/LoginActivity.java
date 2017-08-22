@@ -213,7 +213,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
             Object o = event.getSender();
             Log.i("onLoginEvent","fired from"+o==null?"NA":o.getClass().getName());
-            Intent i = new Intent(this,Temp.class);
+            Intent i = new Intent(this,MainActivity.class);
             startActivity(i);
         }else
         {
