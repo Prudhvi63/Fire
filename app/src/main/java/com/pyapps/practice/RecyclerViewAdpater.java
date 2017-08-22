@@ -29,7 +29,7 @@ public class RecyclerViewAdpater extends RecyclerView.Adapter<RecyclerViewViewHo
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.card_details,parent,false);
 
-        return new RecyclerViewViewHolder(itemView);
+        return new RecyclerViewViewHolder(itemView,context);
     }
 
     @Override

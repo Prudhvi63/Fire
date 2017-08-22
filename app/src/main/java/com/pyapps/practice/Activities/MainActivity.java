@@ -1,127 +1,164 @@
 package com.pyapps.practice.Activities;
 
-import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.widget.Toast;
+import android.support.v7.widget.Toolbar;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.pyapps.practice.Events.LoginEvent;
-import com.pyapps.practice.Events.MessageReceivedEvent;
-import com.pyapps.practice.Models.Message;
-import com.pyapps.practice.Models.Post;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+
+import android.widget.TextView;
+
 import com.pyapps.practice.R;
-import com.pyapps.practice.RecyclerViewAdpater;
-import com.pyapps.practice.Services.DataService;
-import com.pyapps.practice.Services.TempService;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+
+    /**
+     * The {@link android.support.v4.view.PagerAdapter} that will provide
+     * fragments for each of the sections. We use a
+     * {@link FragmentPagerAdapter} derivative, which will keep every
+     * loaded fragment in memory. If this becomes too memory intensive, it
+     * may be best to switch to a
+     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
+     */
+    private SectionsPagerAdapter mSectionsPagerAdapter;
+
+    /**
+     * The {@link ViewPager} that will host the section contents.
+     */
+    private ViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        DataService.getInstance().logInUser("prudhvi@c.com","secret123");
-    }
+        setContentView(R.layout.activity_main2);
 
-    @Subscribe(threadMode= ThreadMode.POSTING)
-    public void onLoginEvent(LoginEvent event)
-    {
-        if(event!=null && event.getUid()!=null)
-        {
-            Object o = event.getSender();
-            Log.i("onLoginEvent","fired from"+o==null?"NA":o.getClass().getName());
-            ArrayList<Post> posts = new ArrayList<Post>();
-            posts.add(new Post("",""));
-            TempService.increaseSize(posts);
-            RecyclerView recyclerView = (RecyclerView) this.findViewById(R.id.recycler);
-            RecyclerViewAdpater adapter = new RecyclerViewAdpater(posts,this);
-            RecyclerView.LayoutManager  mLayoutManager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
-            recyclerView.setLayoutManager(mLayoutManager);
-            recyclerView.setAdapter(adapter);
-            //DataService.getInstance().sendMessage(new Message("Hello World!",DataService.getInstance().getCurrentUserUID(),"UID2"));
-            //readData();
-            //DataService.getInstance().getCurrentUserProfile();
-        }else
-        {
-            Toast.makeText(getApplicationContext(),"Sign In Failed",Toast.LENGTH_LONG).show();
-        }
-    }
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        // Create the adapter that will return a fragment for each of the three
+        // primary sections of the activity.
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
-    @Subscribe
-    public void onMessageReceived(MessageReceivedEvent event){
-        if(event!=null && event.getMessage() != null){
-            Object o = event.getSender();
-            Log.i("onMessageReceivedEvent","fired from"+o==null?"NA":o.getClass().getName());
+        // Set up the ViewPager with the sections adapter.
+        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        }
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(mViewPager);
 
-    }
-
-    public  void readData()
-    {
-        Log.w("LogIn","Sign in Success");
-        Toast.makeText(getApplicationContext(),"Sign In Successful",Toast.LENGTH_LONG).show();
-        FirebaseDatabase db = FirebaseDatabase.getInstance();
-        String UID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        final DatabaseReference databaseReference = db.getReference();
-        DatabaseReference usersReference = databaseReference.child("users");
-        usersReference.child(UID).setValue("sdsdsds");
-        usersReference.child("user2").setValue("tttetet");
-        usersReference.child("user3").setValue("reererer");
-        usersReference.child("user4").setValue("rererergf");
-        usersReference.child("user5").setValue("rere434334");
-
-        DatabaseReference userRef = usersReference.child("user1");
-
-        userRef.addValueEventListener(new ValueEventListener() {
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Object value = dataSnapshot.getValue();
-                String s = value!=null?value.toString():"";
-                Toast.makeText(getApplicationContext(),s,Toast.LENGTH_LONG).show();
-                Toast.makeText(getApplicationContext(),"Data is Changed",Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
             }
         });
-        usersReference.child("user1").setValue("Tyere");
 
     }
 
-    @Subscribe
-    public  void  messageReceived(MessageReceivedEvent e)
-    {
-        Message msg = e.getMessage();
-        
 
-
-    }
     @Override
-    protected void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        EventBus.getDefault().unregister(this);
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * A placeholder fragment containing a simple view.
+     */
+    public static class PlaceholderFragment extends Fragment {
+        /**
+         * The fragment argument representing the section number for this
+         * fragment.
+         */
+        private static final String ARG_SECTION_NUMBER = "section_number";
+
+        public PlaceholderFragment() {
+        }
+
+        /**
+         * Returns a new instance of this fragment for the given section
+         * number.
+         */
+        public static PlaceholderFragment newInstance(int sectionNumber) {
+            PlaceholderFragment fragment = new PlaceholderFragment();
+            Bundle args = new Bundle();
+            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+            fragment.setArguments(args);
+            return fragment;
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
+            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
+            return rootView;
+        }
+    }
+
+    /**
+     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
+     * one of the sections/tabs/pages.
+     */
+    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+
+        public SectionsPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            // getItem is called to instantiate the fragment for the given page.
+            // Return a PlaceholderFragment (defined as a static inner class below).
+            return PlaceholderFragment.newInstance(position + 1);
+        }
+
+        @Override
+        public int getCount() {
+            // Show 3 total pages.
+            return 3;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            switch (position) {
+                case 0:
+                    return "SECTION 1";
+                case 1:
+                    return "SECTION 2";
+                case 2:
+                    return "SECTION 3";
+            }
+            return null;
+        }
     }
 }
